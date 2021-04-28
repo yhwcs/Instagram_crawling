@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 import openpyxl
 import time
 import re
@@ -27,6 +28,7 @@ def get_crawl(URL):
     return crawl_data
 
 # login 유지
+
 driver.implicitly_wait(3)
 driver.get("https://www.instagram.com/accounts/login/")
 login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3]/button'
@@ -56,29 +58,40 @@ search_bio = driver.find_elements_by_css_selector("div._7UhW9.xLCgt.MMzan._0PwGv
 
 max = 15
 cnt = 0
+
+
+
 # 들어가야하는 계정 선택
 for i in range(len(search_id)):
     print(search_name, search_id[i].text)
     if search_name not in search_id[i].text:
         secret = 0
-        cnt+=1
+
         print(search_id[i].text)
-        search_id[i].click()
-        element = driver.find_element_by_css_selector('div.QlxVY')
-        print(element)
-        if element is not None:
+        #time.sleep(3)
+        #search_id[i].click()
+        driver.execute_script("arguments[0].click();", search_id[i])
+        elements = driver.find_element_by_css_selector('article.ySN3v').text
+
+        if elements:
+            # 비공개 계정
             secret = 1
             print(secret)
-        else :
+        else:
+            # 공개 계정
+            cnt += 1
+            # 필요한 정보 크롤링
             print(secret)
+
 
         driver.back()
         driver.find_element_by_xpath(search_xpath).send_keys(search_name)
         search_id = driver.find_elements_by_css_selector("div._7UhW9.xLCgt.qyrsm.KV-D4.uL8Hv")
+        if max == cnt:
+            print(f"mbti {search_name}의 계정을 총 {max}개 찾았습니다")
 
 
-
-# search_bio =
+print(f"mbti {search_name}의 계정을 총 {cnt}개 찾았습니다")
 
 # 컨테이너(포스트) 12개 저장
 instagram = driver.find_elements_by_css_selector("div.v1Nh3")

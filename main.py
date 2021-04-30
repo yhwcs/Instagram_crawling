@@ -152,7 +152,7 @@ for mbti in search_name:
             driver.execute_script("arguments[0].click();", search_id[i])
             elements = []
             elements = driver.find_element_by_css_selector('article.ySN3v').text
-            #print(elements)
+
             if elements:
                 # 비공개 계정
                 secret = 1

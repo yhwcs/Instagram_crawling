@@ -104,8 +104,9 @@ login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3
 
 # 개인정보 보안을 위한 수정
 
-#insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
-#insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
+insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
 driver.find_element_by_xpath(login_x_path).click()
@@ -154,7 +155,7 @@ for mbti in search_name:
             driver.execute_script("arguments[0].click();", search_id[i])
             elements = []
             elements = driver.find_element_by_css_selector('article.ySN3v').text
-            #print(elements)
+
             if elements:
                 # 비공개 계정
                 secret = 1

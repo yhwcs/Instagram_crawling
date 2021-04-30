@@ -160,9 +160,13 @@ for mbti in search_name:
                 follower = driver.find_element_by_css_selector('li.Y8-fY:nth-child(3) span').text
                 story = len(driver.find_elements_by_css_selector('div.tUtVM'))
 
-                # tag post 없는 경우에서 오류나는 듯? 수정 할 것
-                # driver.find_element_by_css_selector('a._9VEo1.T-jvg').click()
-                # tag_post = len(driver.find_elements_by_css_selector('div._9AhH0'))
+                # tag post 없는 경우에서 오류나는 듯? 수정 할 것 - 0430 해결(?) tag_post 개수가 구해지긴 하나, 첫 화면에 보이는 최대 개수 (12개) 이상이 나오지 않음 => 의논 필요
+
+                driver.find_element_by_css_selector('span.qzihg span').click()
+                tag_post_lines = len(driver.find_elements_by_css_selector('div.Nnq7C.weEfm')) # tag_post의 라인수
+                tag_post = len(driver.find_elements_by_css_selector('div._9AhH0')) # tag_post의 개수
+                print(f'tag_post = {tag_post}')
+                driver.back() # tag_post click 한 거 되돌리기( 한번 뒤로가기 )
 
                 # 이미지 크롤링 구현 -> id 폴더 생성 -> id에 해당하는 게시글 사진(여러장인 게시글 일 경우 대표사진만) 폴더에 모음
                 # 폴더 약 200개 생성 예정

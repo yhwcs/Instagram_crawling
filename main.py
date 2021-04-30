@@ -3,9 +3,15 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-import openpyxl
+
+from selenium.common.exceptions import NoSuchElementException
+from urllib.request import urlretrieve
+
+# import openpyxl
 import time
 import re
+import urllib.parse
+import urllib.request
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -28,6 +34,22 @@ def get_crawl(URL):
     ex_id_divs = soup7.find('div', {'id': 'view_content'})
     crawl_data = remove_html_tags(ex_id_divs)
     return crawl_data
+
+
+def scroll_down():
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(3)
+
+
+def add_image():
+    temp_image_list = []
+    image = driver.find_elements_by_class_name("FFVAD")
+    for n in image:
+        temp_image = {}
+        temp_image['alt'] = n.get_attribute('alt')
+        temp_image['src'] = n.get_attribute('src')
+        temp_image_list.append(temp_image)
+    return temp_image_list
 
 
 # login 유지
@@ -111,6 +133,22 @@ for mbti in search_name:
 
                 print(secret)
                 print(post,follower,following,story)
+
+                image_list = []
+                try:
+                    while True:
+                        for n in add_image():
+                            if n in image_list:
+                                pass
+                            else:
+                                image_list.append(n)
+                        scroll_down()
+                        if (int(post) == len(image_list)) or (len(image_list) > 20):
+                            break
+                except NoSuchElementException:
+                    pass
+                for j, n in enumerate(image_list):
+                    urllib.request.urlretrieve(n['src'], str(j)+'.jpg')
 
             print(cnt, max, i)
             driver.back()

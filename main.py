@@ -14,14 +14,8 @@ import urllib.parse
 import urllib.request
 import os
 
-<<<<<<< HEAD
 # import makecsv
-
 credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
-
-=======
-credential_path = "Google Cloud Vision API 사용을 위해 여기에 본인의 API key 주소를 입력해주세요"
->>>>>>> 71634bc (0430 image crawling & detect color)
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()

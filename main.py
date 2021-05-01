@@ -14,10 +14,10 @@ import urllib.parse
 import urllib.request
 import os
 
-
-
 # import makecsv
+
 credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()
@@ -104,8 +104,8 @@ login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3
 
 # 개인정보 보안을 위한 수정
 
-insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
-insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+insta_id = 'shrimp_foodie' # input("인스타그램 아이디를 입력하세요 : ")
+insta_pw = 'xhvkwm_25_' # input("인스타그램 비밀번호를 입력하세요 : ")
 
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
@@ -170,7 +170,6 @@ for mbti in search_name:
                 story = len(driver.find_elements_by_css_selector('div.tUtVM'))
                 print('open account',story)
 
-
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
                 # 태그된 게시물 버튼 경로가 위에 스토리가 있을 때와 없을때가 다르다.....ㅅㅂ... ++ 릴스 있으면 또 달라지지만 오류는 안나니까...희희 -> 가능성 희박...
                 if story != 0:
@@ -181,7 +180,7 @@ for mbti in search_name:
                 else:
                     #/ html / body / div[1] / section / main / div / div[2] / a[2]
                     tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
-                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a['+str(tag_index)+']').click()
+                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a[' + str(tag_index) + ']').click()
 
                 tag_list = []
                 tag_length = 0
@@ -210,7 +209,6 @@ for mbti in search_name:
 
                 print(f'secret = {secret}')
                 print(f"post: {post},follower: {follower},following: {following},story: {story}, tag_post: {tag_post}")
-
                 # 게시글의 색감 추출
                 image_list = []
                 try:
@@ -233,6 +231,7 @@ for mbti in search_name:
                     image_name = os.path.join(os.path.dirname(__file__), str(j)+'.jpg')
                     detect_properties(image_name)
 
+
             print(cnt, max, i)
             driver.back()
 
@@ -241,10 +240,8 @@ for mbti in search_name:
                 break
             else:
                 driver.find_element_by_xpath(search_xpath).send_keys(mbti)
-
                 print(mbti)
                 time.sleep(2)
                 search_id = driver.find_elements_by_css_selector("div._7UhW9.xLCgt.qyrsm.KV-D4.uL8Hv")
                 print(len(search_id))
-
     print(f"mbti {mbti}의 계정을 총 {cnt}개 찾았습니다")

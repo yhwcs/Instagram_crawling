@@ -13,7 +13,7 @@ import re
 import urllib.parse
 import urllib.request
 import os
-import makecsv
+
 
 credential_path = "C:\\21-1학기\캡디1\\vigilant-willow-312400-e78d152f3d88.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path

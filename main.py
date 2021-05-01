@@ -14,13 +14,14 @@ import urllib.parse
 import urllib.request
 import os
 
-credential_path = "Google Cloud Vision API 사용을 위해 여기에 본인의 API key 주소를 입력해주세요"
+credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
+
 # 크롬창(웹드라이버) 열기
 driver = webdriver.Chrome("./chromedriver")
 
@@ -99,8 +100,8 @@ driver.get("https://www.instagram.com/accounts/login/")
 login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3]/button'
 
 # 개인정보 보안을 위한 수정 -> 계정을 하나 파자
-insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
-insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+insta_id = 'shrimp_foodie' # input("인스타그램 아이디를 입력하세요 : ")
+insta_pw = 'xhvkwm_25_' # input("인스타그램 비밀번호를 입력하세요 : ")
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
 driver.find_element_by_xpath(login_x_path).click()
@@ -203,6 +204,7 @@ for mbti in search_name:
                 break
             else:
                 driver.find_element_by_xpath(search_xpath).send_keys(mbti)
+                time.sleep(2)
                 search_id = driver.find_elements_by_css_selector("div._7UhW9.xLCgt.qyrsm.KV-D4.uL8Hv")
 
     print(f"mbti {mbti}의 계정을 총 {cnt}개 찾았습니다")

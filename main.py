@@ -101,7 +101,8 @@ login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3
 
 # 개인정보 보안을 위한 수정 -> 계정을 하나 파자
 
-
+insta_id = 'ojy1369@naver.com' # input("인스타그램 아이디를 입력하세요 : ")
+insta_pw = 'here2Yellow%81' #
 #insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
 #insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
 driver.find_element_by_name('username').send_keys(insta_id)
@@ -169,12 +170,14 @@ for mbti in search_name:
 
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
                 # 태그된 게시물 버튼 경로가 위에 스토리가 있을 때와 없을때가 다르다.....ㅅㅂ... ++ 릴스 있으면 또 달라지지만 오류는 안나니까...희희 -> 가능성 희박...
-                if story:
+                if story != 0 :
                     #/ html / body / div[1] / section / main / div / div[1] / a[2]
-                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a[2]').click()
+                    tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
+                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a['+str(tag_index)+']').click()
                 else:
                     #/ html / body / div[1] / section / main / div / div[2] / a[2]
-                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a[2]').click()
+                    tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
+                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a[' + str(tag_index) + ']').click()
 
                 tag_list = []
                 tag_length = 0

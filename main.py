@@ -14,7 +14,7 @@ import urllib.parse
 import urllib.request
 import os
 
-import makecsv
+# import makecsv
 
 credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
 
@@ -104,8 +104,8 @@ login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3
 
 # 개인정보 보안을 위한 수정 
 
-insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
-insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+insta_id = 'shrimp_foodie' # input("인스타그램 아이디를 입력하세요 : ")
+insta_pw = 'xhvkwm_25_' # input("인스타그램 비밀번호를 입력하세요 : ")
 
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
@@ -144,7 +144,7 @@ for mbti in search_name:
     # 들어가야하는 계정 선택
     for i in range(len(search_id)):
 
-        # print(mbti, search_id[i].text)
+        print(mbti, search_id[i].text)
         print(f"search_id 길이 = {len(search_id)}")
         if mbti not in search_id[i].text:
             secret = 0
@@ -168,17 +168,20 @@ for mbti in search_name:
                 follower = driver.find_element_by_css_selector('li.Y8-fY:nth-child(2) span').text
                 following = driver.find_element_by_css_selector('li.Y8-fY:nth-child(3) span').text
                 story = len(driver.find_elements_by_css_selector('div.tUtVM'))
-                print('open account')
+                print('open account',story)
 
 
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
                 # 태그된 게시물 버튼 경로가 위에 스토리가 있을 때와 없을때가 다르다.....ㅅㅂ... ++ 릴스 있으면 또 달라지지만 오류는 안나니까...희희 -> 가능성 희박...
-                if story:
+                if story != 0:
                     #/ html / body / div[1] / section / main / div / div[1] / a[2]
-                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a[2]').click()
+                    tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
+                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a['+str(tag_index)+']').click()
+                    # tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a[2]').click()
                 else:
                     #/ html / body / div[1] / section / main / div / div[2] / a[2]
-                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a[2]').click()
+                    tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
+                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a['+str(tag_index)+']').click()
 
                 tag_list = []
                 tag_length = 0
@@ -202,34 +205,13 @@ for mbti in search_name:
 
                 # tag_post = len(driver.find_elements_by_css_selector('div._9AhH0'))
 
-
                 # 이미지 크롤링 구현 -> id 폴더 생성 -> id에 해당하는 게시글 사진(여러장인 게시글 일 경우 대표사진만) 폴더에 모음
                 # 폴더 약 200개 생성 예정
 
                 print(f'secret = {secret}')
                 print(f"post: {post},follower: {follower},following: {following},story: {story}, tag_post: {tag_post}")
+
                 # 게시글의 색감 추출
-                image_list = []
-                try:
-                    while True:
-                        for n in add_image():
-                            # 이미 확인한 image의 경우, pass
-                            if n in image_list:
-                                pass
-                            else:
-                                image_list.append(n)
-                        scroll_down()
-                        if (int(post) == len(image_list)) or (len(image_list) > 20):
-                            break
-                except NoSuchElementException:
-                    pass
-
-                # image 저장하고 색상 값 분석
-                for j, n in enumerate(image_list):
-                    urllib.request.urlretrieve(n['src'], str(j)+'.jpg')
-                    image_name = os.path.join(os.path.dirname(__file__), str(j)+'.jpg')
-                    detect_properties(image_name)
-
                 image_list = []
                 try:
                     while True:

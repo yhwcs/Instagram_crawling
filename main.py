@@ -13,8 +13,9 @@ import re
 import urllib.parse
 import urllib.request
 import os
+import makecsv
 
-credential_path = "Google Cloud Vision API 사용을 위해 여기에 본인의 API key 주소를 입력해주세요"
+credential_path = "C:\\21-1학기\캡디1\\vigilant-willow-312400-e78d152f3d88.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()
@@ -99,8 +100,11 @@ driver.get("https://www.instagram.com/accounts/login/")
 login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3]/button'
 
 # 개인정보 보안을 위한 수정 -> 계정을 하나 파자
-insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
-insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+insta_id = 'ojy1369@naver.com' # input("인스타그램 아이디를 입력하세요 : ")
+insta_pw = 'here2Yellow%81' # input("인스타그램 비밀번호를 입력하세요 : ")
+
+#insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
+#insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
 driver.find_element_by_xpath(login_x_path).click()
@@ -137,7 +141,9 @@ for mbti in search_name:
 
     # 들어가야하는 계정 선택
     for i in range(len(search_id)):
+
         # print(mbti, search_id[i].text)
+        print(f"search_id 길이 = {len(search_id)}")
         if mbti not in search_id[i].text:
             secret = 0
 
@@ -145,8 +151,9 @@ for mbti in search_name:
             # time.sleep(3)
             # search_id[i].click()
             driver.execute_script("arguments[0].click();", search_id[i])
+            elements = []
             elements = driver.find_element_by_css_selector('article.ySN3v').text
-
+            #print(elements)
             if elements:
                 # 비공개 계정
                 secret = 1
@@ -156,20 +163,48 @@ for mbti in search_name:
                 cnt += 1
                 # 필요한 정보 크롤링
                 post = driver.find_element_by_css_selector('span.-nal3 span').text
-                following = driver.find_element_by_css_selector('li.Y8-fY:nth-child(2) span').text
-                follower = driver.find_element_by_css_selector('li.Y8-fY:nth-child(3) span').text
+                follower = driver.find_element_by_css_selector('li.Y8-fY:nth-child(2) span').text
+                following = driver.find_element_by_css_selector('li.Y8-fY:nth-child(3) span').text
                 story = len(driver.find_elements_by_css_selector('div.tUtVM'))
+                print('open account')
 
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
-                # driver.find_element_by_css_selector('a._9VEo1.T-jvg').click()
+                # 태그된 게시물 버튼 경로가 위에 스토리가 있을 때와 없을때가 다르다.....ㅅㅂ... ++ 릴스 있으면 또 달라지지만 오류는 안나니까...희희 -> 가능성 희박...
+                if story:
+                    #/ html / body / div[1] / section / main / div / div[1] / a[2]
+                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a[2]').click()
+                else:
+                    #/ html / body / div[1] / section / main / div / div[2] / a[2]
+                    tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a[2]').click()
+
+                tag_list = []
+                tag_length = 0
+                try:
+                    while True:
+                        for image in add_image():
+                            # 이미 확인한 image의 경우, pass
+                            tag_length = len(tag_list)
+                            print(image)
+                            if image in tag_list:
+                                pass
+                            else:
+                                tag_list.append(image)
+                        scroll_down()
+                        if len(tag_list) > 20 or tag_length == len(tag_list):
+                            break
+                except NoSuchElementException:
+                    pass
+                tag_post = len(tag_list)
+                driver.back()
+
                 # tag_post = len(driver.find_elements_by_css_selector('div._9AhH0'))
 
                 # 이미지 크롤링 구현 -> id 폴더 생성 -> id에 해당하는 게시글 사진(여러장인 게시글 일 경우 대표사진만) 폴더에 모음
                 # 폴더 약 200개 생성 예정
 
-                print(secret)
-                print(post,follower,following,story)
-
+                print(f'secret = {secret}')
+                print(f"post: {post},follower: {follower},following: {following},story: {story}, tag_post: {tag_post}")
+                # 게시글의 색감 추출
                 image_list = []
                 try:
                     while True:
@@ -199,6 +234,8 @@ for mbti in search_name:
                 break
             else:
                 driver.find_element_by_xpath(search_xpath).send_keys(mbti)
+                print(mbti)
+                time.sleep(2)
                 search_id = driver.find_elements_by_css_selector("div._7UhW9.xLCgt.qyrsm.KV-D4.uL8Hv")
-
+                print(len(search_id))
     print(f"mbti {mbti}의 계정을 총 {cnt}개 찾았습니다")

@@ -3,9 +3,19 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-import openpyxl
+
+from selenium.common.exceptions import NoSuchElementException
+from urllib.request import urlretrieve
+
+# import openpyxl
 import time
 import re
+import urllib.parse
+import urllib.request
+import os
+
+credential_path = "Google Cloud Vision API 사용을 위해 여기에 본인의 API key 주소를 입력해주세요"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -30,9 +40,61 @@ def get_crawl(URL):
     return crawl_data
 
 
+def scroll_down():
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(3)
+
+
+def add_image():
+    temp_image_list = []
+    image = driver.find_elements_by_class_name("FFVAD")
+    for n in image:
+        temp_image = {}
+        temp_image['alt'] = n.get_attribute('alt')
+        temp_image['src'] = n.get_attribute('src')
+        temp_image_list.append(temp_image)
+    return temp_image_list
+
+
+def detect_properties(path):
+    """Detects image properties in the file."""
+    from google.cloud import vision
+    import io
+    client = vision.ImageAnnotatorClient()
+
+    with io.open(path, 'rb') as image_file:
+        content = image_file.read()
+
+    image = vision.Image(content=content)
+
+    response = client.image_properties(image=image)
+    props = response.image_properties_annotation
+
+    max_fraction = 0.0
+    color_count = 0
+    color_r = 0.0;  color_g = 0.0; color_b = 0.0
+
+    for color in props.dominant_colors.colors:
+        color_count += 1
+        if color.pixel_fraction >= max_fraction:
+            max_fraction = color.pixel_fraction
+            color_r = color.color.red
+            color_g = color.color.green
+            color_b = color.color.blue
+
+        if color_count >= 5:    # 시간상 최대 5개 색 비교
+            break
+
+    # 해당 image의 가장 큰 fraction을 차지하는 color의 rgb값을 출력
+    print("r: {}\tg: {}\tb: {}".format(color_r, color_g, color_b))
+
+    if response.error.message:
+        raise Exception('{}\nFor more info on error messages, check: ''https://cloud.google.com/apis/design/errors'.format(response.error.message))
+
+
 # login 유지
 
-driver.implicitly_wait(3)
+driver.implicitly_wait(5)
 driver.get("https://www.instagram.com/accounts/login/")
 login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3]/button'
 
@@ -111,6 +173,27 @@ for mbti in search_name:
 
                 print(secret)
                 print(post,follower,following,story)
+
+                image_list = []
+                try:
+                    while True:
+                        for n in add_image():
+                            # 이미 확인한 image의 경우, pass
+                            if n in image_list:
+                                pass
+                            else:
+                                image_list.append(n)
+                        scroll_down()
+                        if (int(post) == len(image_list)) or (len(image_list) > 20):
+                            break
+                except NoSuchElementException:
+                    pass
+
+                # image 저장하고 색상 값 분석
+                for j, n in enumerate(image_list):
+                    urllib.request.urlretrieve(n['src'], str(j)+'.jpg')
+                    image_name = os.path.join(os.path.dirname(__file__), str(j)+'.jpg')
+                    detect_properties(image_name)
 
             print(cnt, max, i)
             driver.back()

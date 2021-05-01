@@ -13,15 +13,18 @@ import re
 import urllib.parse
 import urllib.request
 import os
+
 import makecsv
 
-credential_path = "C:\\21-1학기\캡디1\\vigilant-willow-312400-e78d152f3d88.json"
+credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
+
 # 크롬창(웹드라이버) 열기
 driver = webdriver.Chrome("./chromedriver")
 
@@ -99,11 +102,11 @@ driver.implicitly_wait(5)
 driver.get("https://www.instagram.com/accounts/login/")
 login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3]/button'
 
-# 개인정보 보안을 위한 수정 -> 계정을 하나 파자
-
+# 개인정보 보안을 위한 수정 
 
 insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
 insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
 driver.find_element_by_xpath(login_x_path).click()
@@ -167,6 +170,7 @@ for mbti in search_name:
                 story = len(driver.find_elements_by_css_selector('div.tUtVM'))
                 print('open account')
 
+
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
                 # 태그된 게시물 버튼 경로가 위에 스토리가 있을 때와 없을때가 다르다.....ㅅㅂ... ++ 릴스 있으면 또 달라지지만 오류는 안나니까...희희 -> 가능성 희박...
                 if story:
@@ -198,12 +202,34 @@ for mbti in search_name:
 
                 # tag_post = len(driver.find_elements_by_css_selector('div._9AhH0'))
 
+
                 # 이미지 크롤링 구현 -> id 폴더 생성 -> id에 해당하는 게시글 사진(여러장인 게시글 일 경우 대표사진만) 폴더에 모음
                 # 폴더 약 200개 생성 예정
 
                 print(f'secret = {secret}')
                 print(f"post: {post},follower: {follower},following: {following},story: {story}, tag_post: {tag_post}")
                 # 게시글의 색감 추출
+                image_list = []
+                try:
+                    while True:
+                        for n in add_image():
+                            # 이미 확인한 image의 경우, pass
+                            if n in image_list:
+                                pass
+                            else:
+                                image_list.append(n)
+                        scroll_down()
+                        if (int(post) == len(image_list)) or (len(image_list) > 20):
+                            break
+                except NoSuchElementException:
+                    pass
+
+                # image 저장하고 색상 값 분석
+                for j, n in enumerate(image_list):
+                    urllib.request.urlretrieve(n['src'], str(j)+'.jpg')
+                    image_name = os.path.join(os.path.dirname(__file__), str(j)+'.jpg')
+                    detect_properties(image_name)
+
                 image_list = []
                 try:
                     while True:
@@ -233,8 +259,10 @@ for mbti in search_name:
                 break
             else:
                 driver.find_element_by_xpath(search_xpath).send_keys(mbti)
+
                 print(mbti)
                 time.sleep(2)
                 search_id = driver.find_elements_by_css_selector("div._7UhW9.xLCgt.qyrsm.KV-D4.uL8Hv")
                 print(len(search_id))
+
     print(f"mbti {mbti}의 계정을 총 {cnt}개 찾았습니다")

@@ -15,6 +15,7 @@ import urllib.request
 import os
 
 
+
 # import makecsv
 credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
@@ -102,7 +103,6 @@ driver.get("https://www.instagram.com/accounts/login/")
 login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3]/button'
 
 # 개인정보 보안을 위한 수정
-
 
 #insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
 #insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")

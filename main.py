@@ -13,7 +13,7 @@ import re
 import urllib.parse
 import urllib.request
 import os
-
+import makecsv
 
 credential_path = "C:\\21-1학기\캡디1\\vigilant-willow-312400-e78d152f3d88.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
@@ -99,12 +99,11 @@ driver.implicitly_wait(5)
 driver.get("https://www.instagram.com/accounts/login/")
 login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3]/button'
 
-# 개인정보 보안을 위한 수정 -> 계정을 하나 파자
+# 개인정보 보안을 위한 수정
 
-insta_id = 'ojy1369@naver.com' # input("인스타그램 아이디를 입력하세요 : ")
-insta_pw = 'here2Yellow%81' #
-#insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
-#insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
+insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
+
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
 driver.find_element_by_xpath(login_x_path).click()

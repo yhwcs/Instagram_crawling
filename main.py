@@ -15,7 +15,6 @@ import urllib.request
 import os
 
 # import makecsv
-
 credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 

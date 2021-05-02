@@ -16,13 +16,13 @@ import os
 
 # import makecsv
 credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
-
 # 크롬창(웹드라이버) 열기
 driver = webdriver.Chrome("./chromedriver")
 
@@ -166,6 +166,7 @@ for mbti in search_name:
                 follower = driver.find_element_by_css_selector('li.Y8-fY:nth-child(2) span').text
                 following = driver.find_element_by_css_selector('li.Y8-fY:nth-child(3) span').text
                 story = len(driver.find_elements_by_css_selector('div.tUtVM'))
+
                 print('open account',story)
 
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
@@ -175,6 +176,7 @@ for mbti in search_name:
                     tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
                     tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a['+str(tag_index)+']').click()
                     # tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a[2]').click()
+
                 else:
                     #/ html / body / div[1] / section / main / div / div[2] / a[2]
                     tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
@@ -228,7 +230,6 @@ for mbti in search_name:
                     urllib.request.urlretrieve(n['src'], str(j)+'.jpg')
                     image_name = os.path.join(os.path.dirname(__file__), str(j)+'.jpg')
                     detect_properties(image_name)
-
 
             print(cnt, max, i)
             driver.back()

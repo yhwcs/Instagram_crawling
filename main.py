@@ -242,24 +242,15 @@ for mbti in search_name:
                                 print(f'row = {row}, col = {col}')
 
                                 driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div['+str(story_idx)+']/article/div[1]/div/div['+str(row)+']/div['+str(col)+']').click()
-                                emoji_list = None
-                                if emoji_list is None:
-                                    print('NuLL')
-                                else:
-                                    print(emoji_list)
-                                # 게시글 텍스트 추출
-                                #context = driver.find_element_by_css_selector('div.C4VMK').text
 
-                                #print(emoji_list)
-                                context = driver.find_element_by_css_selector('div.C4VMK').text
-                                if context is None:
-                                    print('Null context')
-                                emoji_list = re.findall(emoji.get_emoji_regexp(), context)
-                                if emoji_list is None:
-                                    print('NuLL')
-                                else:
+                                # 게시글 텍스트 추출
+                                try :
+                                    context = driver.find_element_by_css_selector('div.C4VMK').text
+                                    emoji_list = re.findall(emoji.get_emoji_regexp(), context)
+                                    emoticons += len(emoji_list)
                                     print(emoji_list)
-                                emoticons += len(emoji_list)
+                                except NoSuchElementException:
+                                    print('No context in post')
                                 time.sleep(2)
                                 driver.find_element_by_xpath('/html/body/div[5]/div[3]/button').click() #X : 창 닫기
                                 driver.back()

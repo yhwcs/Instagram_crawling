@@ -14,7 +14,6 @@ import urllib.request
 import os
 import emoji
 
-
 credential_path = ""
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 

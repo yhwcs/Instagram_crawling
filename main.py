@@ -12,8 +12,10 @@ import re
 import urllib.parse
 import urllib.request
 import os
+
 import emoji
 
+# input your credential_path
 credential_path = ""
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
@@ -103,6 +105,7 @@ login_x_path = '/html/body/div[1]/section/main/div/div/div[1]/div/form/div/div[3
 #insta_id = 'myaho_123' # input("인스타그램 아이디를 입력하세요 : ")
 #insta_pw = 'capstonemyaho' # input("인스타그램 비밀번호를 입력하세요 : ")
 
+
 driver.find_element_by_name('username').send_keys(insta_id)
 driver.find_element_by_name('password').send_keys(insta_pw)
 driver.find_element_by_xpath(login_x_path).click()
@@ -138,9 +141,9 @@ for mbti in search_name:
     cnt = 0
 
     # 들어가야하는 계정 선택
-    for i in range(21,len(search_id)):
+    for i in range(len(search_id)):
 
-        # print(mbti, search_id[i].text)
+        print(mbti, search_id[i].text)
         print(f"search_id 길이 = {len(search_id)}")
         if mbti not in search_id[i].text:
             secret = 0
@@ -151,10 +154,11 @@ for mbti in search_name:
             elements=[]
             time.sleep(3)
             elements = driver.find_element_by_css_selector('article.ySN3v').text
+
             print(elements)
             print(len(elements))
             #print(elements)
-            if( len(elements) != 0):
+            if(len(elements) != 0):
                 # 비공개 계정
                 secret = 1
                 print(secret)
@@ -167,11 +171,13 @@ for mbti in search_name:
                 follower = driver.find_element_by_css_selector('li.Y8-fY:nth-child(2) span').text
                 following = driver.find_element_by_css_selector('li.Y8-fY:nth-child(3) span').text
                 story = len(driver.find_elements_by_css_selector('div.tUtVM'))
-                print('open account')
+
+                print('open account',story)
 
                 print(f'story = {story}')
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
                 # 태그된 게시물 버튼 경로가 위에 스토리가 있을 때와 없을때가 다르다.....ㅅㅂ... ++ 릴스 있으면 또 달라지지만 오류는 안나니까...희희 -> 가능성 희박...
+
                 time.sleep(3)
                 #tag_index = 0
                 if (story != 0):
@@ -180,6 +186,7 @@ for mbti in search_name:
                     tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[2]/a[' + str(tag_index) + ']').click()
                     #tag = driver.find_element_by_xpath("//*[@aria-label='태그됨']").click()
                     #driver.find_elements_by_css_selector('svg._8-yf5 ').click()
+
                 else:
                     tag_index = len(driver.find_elements_by_css_selector('div.fx7hk a'))
                     tag = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/a[' + str(tag_index) + ']').click()

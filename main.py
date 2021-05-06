@@ -122,6 +122,8 @@ driver.find_element_by_xpath(login_x_path2).click()
 
 driver.implicitly_wait(3)
 login_x_path3 = '/html/body/div[4]/div/div/div/div[3]/button[2]'
+# /html/body/div[4]/div/div/div/div[3]/button[2]
+#/html/body/div[4]/div/div/div/div[3]/button[2]
 driver.find_element_by_xpath(login_x_path3).click()
 
 search_xpath = '/html/body/div[1]/section/nav/div[2]/div/div/div[2]/input'
@@ -176,9 +178,12 @@ for mbti in search_name:
                 post = driver.find_element_by_css_selector('span.-nal3 span').text
                 follower = driver.find_element_by_css_selector('li.Y8-fY:nth-child(2) span').text
                 following = driver.find_element_by_css_selector('li.Y8-fY:nth-child(3) span').text
-                story = len(driver.find_elements_by_css_selector('div.tUtVM'))
 
-                print('open account',story)
+                # story = len(driver.find_elements_by_css_selector('div.tUtVM'))
+                # story = 0
+                time.sleep(3)
+                story = driver.find_elements_by_css_selector('div.tUtVM')
+                story_cnt = len(story)
 
                 print(f'story = {story}')
                 # tag post 없는 경우에서 오류나는 듯? 수정 할 것
@@ -276,6 +281,7 @@ for mbti in search_name:
                 intensity_list = []
 
                 for j, n in enumerate(image_list):
+                    time.sleep(5)
                     urllib.request.urlretrieve(n['src'], str(j)+'.jpg')
                     image_name = os.path.join(os.path.dirname(__file__), str(j)+'.jpg')
                     saturation, intensity = detect_properties(image_name)
@@ -308,4 +314,5 @@ for mbti in search_name:
                 time.sleep(2)
                 search_id = driver.find_elements_by_css_selector("div._7UhW9.xLCgt.qyrsm.KV-D4.uL8Hv")
                 print(len(search_id))
+
     print(f"mbti {mbti}의 계정을 총 {cnt}개 찾았습니다")

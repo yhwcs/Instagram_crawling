@@ -21,7 +21,7 @@ wr = csv.writer(f)
 wr.writerow(['mbti','id','secret','following','follower','post','tag_post','story','saturation','intensity','emoji'])
 
 # input your credential_path
-credential_path = "/Users/jangseowoo/Downloads/stunning-yeti-312411-f2d6f0754d62.json"
+credential_path = ""
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 chrome_options = Options()
@@ -142,7 +142,7 @@ search_xpath = '/html/body/div[1]/section/nav/div[2]/div/div/div[2]/input'
 # 미통과 심각 수준 'estj','estp' 'infj'**굉장히 문제가 많음  est들은 인스타를 안하는 건가 -> 오픈채팅방으로 구하기
 # 통과 'istj','isfj','isfp','intp','esfj','entj','entp','enfj'
 # search_name = ['istj','isfj','isfp','intj','intp','esfj','entj','entp','enfj','enfp','istp','infp','esfp']
-search_name = ['enfp']
+search_name = ['sunwoo']
 for mbti in search_name:
     # print("mbti", mbti)
     driver.find_element_by_xpath(search_xpath).send_keys(mbti)
@@ -157,6 +157,7 @@ for mbti in search_name:
     else:
         max = 15
 
+    max = 50
     cnt = 0
 
     secret=0; following=0; follower=0; post=0; tag_post=0; story_cnt=0; saturation_avg=0; intensity_avg=0; emoti=0;
@@ -166,7 +167,8 @@ for mbti in search_name:
 
         print(mbti, search_id[i].text)
         print(f"search_id 길이 = {len(search_id)}")
-        if mbti not in search_id[i].text or '#' not in search_id[i].text:
+        #if mbti not in search_id[i].text and '#' not in search_id[i].text:
+        if '#' not in search_id[i].text:
             secret = 0
             print(search_id[i].text)
             id = search_id[i].text
@@ -339,6 +341,8 @@ for mbti in search_name:
 
             wr.writerow([mbti,id,secret,following,follower,post,tag_post,story_cnt,round(saturation_avg*100, 5),round(intensity_avg*100, 5),round(emoti,5)])
 
+            # f.close()
+            # break
     print(f"mbti {mbti}의 계정을 총 {cnt}개 찾았습니다")
 
 f.close()
